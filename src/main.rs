@@ -1,6 +1,16 @@
-use std::{error::Error, process, io, collections::HashMap};
+use std::{error::Error, process, io};
+use serde::Deserialize;
 
-type Record = HashMap<String, String>;
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "PascalCase")]
+struct Record {
+    latitude: f64,
+    longitude: f64,
+    #[serde(deserialize_with = "csv::invalid_option")]
+    population: Option<u64>,
+    city: String,
+    state: String,
+}
 
 fn run() -> Result<(), Box<dyn Error>> {
     let mut rdr = csv::Reader::from_reader(io::stdin());
