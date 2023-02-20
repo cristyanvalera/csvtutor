@@ -1,6 +1,6 @@
-use std::{error::Error, process, io};
+use std::{error::Error, process, io, collections::HashMap};
 
-type Record = (String, String, Option<u64>, f64, f64);
+type Record = HashMap<String, String>;
 
 fn run() -> Result<(), Box<dyn Error>> {
     let mut rdr = csv::Reader::from_reader(io::stdin());
