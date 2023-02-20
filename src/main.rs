@@ -1,19 +1,22 @@
 use std::{error::Error, process, io};
 
-fn run() -> Result<(), Box<dyn Error>> {
-    let mut rdr = csv::ReaderBuilder::new()
-        .has_headers(false)
-        .delimiter(b';')
-        .double_quote(false)
-        .escape(Some(b'\\'))
-        .flexible(true)
-        .comment(Some(b'#'))
-        .from_reader(io::stdin());
+// type Record = (String, String, Option<u64>, f64, f64);
 
+fn run() -> Result<(), Box<dyn Error>> {
+    let mut rdr = csv::Reader::from_reader(io::stdin());
     for result in rdr.records() {
         let record = result?;
+        
+        let city = &record[0];
+        let state = &record[1];
+        let pop: Option<u64> = record[2].parse().ok();
+        let latitude: f64 = record[3].parse()?;
+        let longitude: f64 = record[4].parse()?;
 
-        println!("{:?}", record);
+        println!(
+            "city: {:?}, state: {:?}, \
+            pop: {:?}, latitude: {:?}, longitude: {:?}",
+            city, state, pop, latitude, longitude);
     }
 
     Ok(())
